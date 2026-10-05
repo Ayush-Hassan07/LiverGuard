@@ -12,6 +12,9 @@ import "../styles/mobile.css";
 export const metadata: Metadata = {
   title: "LiverGuard — NAFLD risk screening",
   description: "A transparent, educational NAFLD risk-prediction prototype.",
+  icons: {
+    icon: "/liverguard-mark.png",
+  },
 };
 
 export default function RootLayout({
@@ -23,7 +26,9 @@ export default function RootLayout({
         <header className="site-header">
           <div className="container nav-wrap">
             <Link className="brand" href="/">
-              <span className="brand-mark">✦</span>
+              <span className="brand-mark">
+                <img src="/liverguard-mark.png" alt="" />
+              </span>
               <span>
                 Liver<span className="brand-accent">Guard</span>
               </span>
@@ -50,7 +55,9 @@ export default function RootLayout({
           <div className="container footer-grid">
             <div>
               <div className="brand footer-brand">
-                <span className="brand-mark">✦</span>
+                <span className="brand-mark">
+                  <img src="/liverguard-mark.png" alt="" />
+                </span>
                 <span>
                   Liver<span className="brand-accent">Guard</span>
                 </span>
