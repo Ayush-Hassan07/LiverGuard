@@ -1,0 +1,152 @@
+.mobile-menu {
+  display: none;
+  position: relative;
+}
+
+.mobile-menu summary {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--green);
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+  list-style: none;
+}
+
+.mobile-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.mobile-menu-panel {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  z-index: 20;
+  min-width: 180px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 12px 25px rgba(20, 37, 31, 0.12);
+}
+
+.mobile-menu-panel a {
+  display: block;
+  padding: 10px 12px;
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.mobile-menu-panel a:hover,
+.mobile-menu-panel a:focus-visible {
+  border-radius: 5px;
+  background: var(--tint);
+}
+
+@media (max-width: 760px) {
+  .mobile-menu {
+    display: block;
+    order: 2;
+  }
+
+  .site-header .button-small {
+    order: 3;
+  }
+
+  .site-header .brand {
+    order: 1;
+  }
+
+  .site-footer {
+    padding: 42px 0 18px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-bottom: 32px;
+  }
+
+  .footer-grid p {
+    max-width: none;
+  }
+
+  .footer-grid a {
+    margin: 7px 0;
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .prediction-form {
+    width: 100%;
+    padding: 18px;
+  }
+
+  .form-grid {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px 0;
+  }
+
+  .prediction-form .form-grid > .field,
+  .prediction-form .form-grid > .bmi-preview {
+    grid-column: 1;
+    order: initial;
+  }
+
+  .field,
+  .height-field,
+  .bmi-preview {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .height-inputs {
+    width: 100%;
+  }
+
+  .height-inputs .input-wrap {
+    min-width: 0;
+  }
+
+  .field-label,
+  .field-hint {
+    max-width: 100%;
+  }
+
+  .input-wrap,
+  .input-wrap input,
+  .input-wrap select {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 370px) {
+  .nav-wrap {
+    gap: 8px;
+  }
+
+  .brand {
+    font-size: 18px;
+  }
+
+  .site-header .button-small {
+    padding: 0 10px;
+  }
+
+  .mobile-menu summary {
+    width: 36px;
+    height: 36px;
+  }
+}

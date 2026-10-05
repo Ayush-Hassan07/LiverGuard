@@ -1,0 +1,45 @@
+.form-grid > .bmi-preview {
+  order: 4 !important;
+  min-height: 0;
+  height: 48px;
+  margin-top: 29px;
+  padding: 0 13px;
+  align-self: start;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+.form-grid > .bmi-preview::before {
+  content: "BMI";
+  position: absolute;
+  left: 0;
+  top: -29px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+.bmi-preview .bmi-label {
+  font-size: 13px;
+  font-weight: 600;
+}
+.bmi-preview .bmi-label {
+  display: none;
+}
+.bmi-preview strong {
+  font-size: 16px;
+  color: var(--green);
+  margin-left: auto;
+}
+.bmi-preview > span:last-child {
+  font-size: 11px;
+  color: #87958d;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .form-grid > .bmi-preview {
+    order: initial !important;
+    height: 48px;
+    min-height: 0;
+  }
+}

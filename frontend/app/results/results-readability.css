@@ -1,0 +1,19 @@
+.page-shell .muted { color: #40584d; font-size: 14px; line-height: 1.6; }
+.page-shell .content-card .eyebrow, .page-shell .base-model-heading .eyebrow { color: #4c6a5b; }
+.page-shell .content-card h2, .page-shell .base-model-heading h2 { color: #102d25; }
+.factor-index { color: #4f6b5d; }
+.factor-heading strong { color: #102d25; font-size: 15px; }
+.factor-value { font-size: 11px; font-weight: 600; }
+.factor-direction { font-size: 12px; font-weight: 600; }
+.base-model-heading > p { color: #40584d; line-height: 1.55; }
+.mini-card span { color: #40584d; }
+.mini-card strong, .result-meta strong { color: #102d25; }
+.result-meta span { color: #536b5f; }
+.result-disclaimer { color: #40584d; line-height: 1.55; }
+.page-shell .muted strong { color: #102d25; }
+.factor { grid-template-columns: 28px 1fr 165px; }
+.factor-direction { white-space: nowrap; }
+@media (max-width: 760px) {
+  .factor { grid-template-columns: 25px 1fr; }
+  .factor-direction { white-space: normal; }
+}

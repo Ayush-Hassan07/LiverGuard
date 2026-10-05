@@ -1,0 +1,237 @@
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.form-heading h2,
+.content-card h2 {
+  margin: 0;
+  font-size: 25px;
+  letter-spacing: -0.035em;
+}
+
+.required-note,
+.muted {
+  color: #839087;
+  font-size: 12px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px 20px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.field-label small {
+  margin-left: 6px;
+  color: #9aa49d;
+  font-weight: 400;
+}
+
+.input-wrap {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #d0dbd3;
+  border-radius: 4px;
+  background: #fbfdfb;
+}
+
+.input-wrap:focus-within {
+  border-color: #5c9e72;
+  box-shadow: 0 0 0 3px #e0f1e4;
+}
+
+.input-wrap input {
+  width: 100%;
+  height: 100%;
+  padding: 0 13px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 16px "DM Sans";
+}
+
+.input-wrap input::placeholder {
+  color: #b0bab3;
+}
+
+.input-wrap > span {
+  padding-right: 12px;
+  color: #87958d;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.input-wrap select {
+  width: 100%;
+  height: 100%;
+  padding: 0 40px 0 13px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 16px "DM Sans";
+  cursor: pointer;
+}
+
+.input-wrap select:focus-visible {
+  outline: 0;
+}
+
+.field-hint {
+  margin-top: 5px;
+  color: #64766d;
+  font-size: 11px;
+}
+
+.field-label {
+  color: #102d25;
+  font-size: 14px;
+}
+
+.form-bottom {
+  margin-top: 32px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.form-footnote {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 17px;
+  color: #53665d;
+  font-size: 12px;
+}
+
+.form-footnote svg {
+  flex: 0 0 auto;
+}
+
+.submit-button {
+  width: 100%;
+  min-height: 54px;
+}
+
+.form-error {
+  padding: 10px 12px;
+  border: 1px solid #f2c8c1;
+  border-radius: 4px;
+  background: #fff0ed;
+  color: #ba493d;
+  font-size: 13px;
+}
+
+/* =========================================================
+   HEIGHT / BMI
+========================================================= */
+
+.height-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.height-inputs .input-wrap {
+  flex: 1;
+}
+
+.height-and {
+  color: #8b968f;
+  font-size: 12px;
+}
+
+.field-Age {
+  order: 1;
+}
+
+.height-field {
+  order: 2;
+}
+
+.field-Weight {
+  order: 3;
+}
+
+.bmi-preview {
+  order: 4;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 13px;
+  border: 1px solid #d0dbd3;
+  border-radius: 4px;
+  background: #fbfdfb;
+}
+
+.bmi-preview .bmi-label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.bmi-preview strong {
+  margin-left: auto;
+  color: var(--green);
+  font-size: 18px;
+}
+
+.bmi-preview > span:last-child {
+  color: #87958d;
+  font-size: 11px;
+}
+
+.form-grid > .field:not(.field-Age):not(.field-Weight):not(.height-field),
+.form-grid > .bmi-preview {
+  order: 5;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+  color: var(--green);
+  font-size: 13px;
+}
+
+.progress small {
+  margin-left: auto;
+  color: #849089;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #cae4d0;
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

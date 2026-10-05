@@ -1,0 +1,6 @@
+$ErrorActionPreference = "Stop"
+Write-Host "Start the ML service in a separate terminal with Python 3.12 first."
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PSScriptRoot\ml-service'; python -m uvicorn app.main:app --reload --port 8000"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PSScriptRoot\backend'; dotnet run --urls http://localhost:5000"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$PSScriptRoot\frontend'; npm.cmd run dev"
+Write-Host "Open http://localhost:3000"

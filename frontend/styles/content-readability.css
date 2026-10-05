@@ -1,0 +1,26 @@
+.page-shell {
+  padding-top: 28px !important;
+}
+
+.page-shell .page-lede,
+.page-shell .content-card > p,
+.page-shell .split-content p,
+.page-shell .model-flow span,
+.page-shell .dark-callout p:last-child {
+  color: #4d6259;
+}
+
+.page-shell .content-card h2,
+.page-shell .split-content h2,
+.page-shell .model-flow strong {
+  color: #102d25;
+}
+
+.page-shell .dark-callout h2 {
+  color: #ffffff;
+}
+
+.page-shell .content-card,
+.page-shell .dark-callout {
+  margin-top: 22px;
+}

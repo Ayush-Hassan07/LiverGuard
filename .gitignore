@@ -1,0 +1,30 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env*
+!frontend/.env.example
+
+# .NET
+backend/bin/
+backend/obj/
+backend/.vs/
+
+# ML and local runtime artifacts
+ml-service/.env*
+ml-service/__pycache__/
+*.log
+
+# IDE and operating-system files
+.vscode/
+.idea/
+*.user
+*.suo
+.DS_Store
+Thumbs.db

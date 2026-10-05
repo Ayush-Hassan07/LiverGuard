@@ -1,0 +1,7 @@
+{
+    "method": "Weight/BMI Formula",
+    "formula": "Height_cm = sqrt(Weight_kg / BMI) * 100",
+    "benchmark_MAE_cm": 1.4232,
+    "benchmark_RMSE_cm": 3.6778,
+    "benchmark_R2": 0.8549
+}

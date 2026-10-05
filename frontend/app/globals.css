@@ -1,0 +1,4 @@
+/* Application-wide stylesheet entry point. */
+@import "../styles/shared.css";
+@import "../components/prediction-form.css";
+@import "./about-model/about-model.css";

@@ -1,0 +1,40 @@
+.difference-title {
+  color: #102d25;
+}
+
+.difference-grid > div {
+  color: #53655d;
+  font-size: 15px;
+  line-height: 1.55;
+  align-items: flex-start;
+}
+
+.difference-grid strong {
+  color: #102d25;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.get-section > .container > .section-subtitle,
+.difference-grid span {
+  color: #53655d;
+}
+
+.difference-grid > div {
+  border-color: #c7d7cc;
+}
+
+.difference-grid > div > b {
+  width: 48px;
+  height: 48px;
+  font-size: 23px;
+}
+
+.threshold-line b {
+  top: -18px;
+  transform: translateX(-50%);
+  z-index: 1;
+  background: #fff;
+  padding: 0 3px;
+}

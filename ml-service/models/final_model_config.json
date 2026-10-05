@@ -1,0 +1,35 @@
+{
+    "model_type": "5-fold OOF Stacking Ensemble",
+    "base_models": [
+        "Logistic Regression",
+        "Random Forest",
+        "XGBoost"
+    ],
+    "meta_model": "Logistic Regression",
+    "decision_threshold": 0.78,
+    "threshold_selection": "Maximum validation Macro F1",
+    "validation_macro_f1": 0.8075,
+    "test_macro_f1": 0.8204,
+    "validation_accuracy": 0.9875,
+    "test_accuracy": 0.9888,
+    "validation_class_0_recall": 0.8,
+    "test_class_0_recall": 0.8,
+    "test_class_1_recall": 0.9913,
+    "test_roc_auc": 0.995,
+    "height_missing_strategy": "Height_cm = sqrt(Weight_kg / BMI) * 100",
+    "height_reconstruction_mae_cm": 1.4232,
+    "features": [
+        "Age",
+        "Height",
+        "Weight",
+        "BMI",
+        "FBS",
+        "ALT",
+        "AST",
+        "LDL",
+        "HDL",
+        "Triglycerides",
+        "Cholesterol",
+        "Diabetes"
+    ]
+}
