@@ -194,23 +194,18 @@ export default function PredictionForm() {
   ========================================================= */
 
   useEffect(() => {
-    const base =
-      process.env
-        .NEXT_PUBLIC_API_BASE_URL ||
-      "http://localhost:5000";
-
     const warmupController =
       new AbortController();
 
     fetch(
-      `${base}/api/ml/warmup`,
+      "https://liverguard-ml-service.onrender.com/ready",
       {
         method: "GET",
-        signal:
-          warmupController.signal,
+        mode: "no-cors",
+        signal: warmupController.signal,
       },
     ).catch(() => {
-      // Warmup failures are intentionally ignored.
+      // Warmup is best-effort only.
     });
 
     return () => {
