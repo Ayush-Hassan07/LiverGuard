@@ -152,6 +152,7 @@ export default function PredictionForm() {
 
     if (target.matches('input[type="number"]')) {
       event.preventDefault();
+      target.blur();
     }
   }
 
