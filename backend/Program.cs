@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient("ml", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["MlServiceUrl"] ?? "http://localhost:8000");
-    client.Timeout = TimeSpan.FromSeconds(30);
+    client.Timeout = TimeSpan.FromSeconds(90);
 });
 builder.Services.AddCors(options =>
 {
