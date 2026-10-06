@@ -2,6 +2,7 @@
 
 import {
   FormEvent,
+  WheelEvent,
   useEffect,
   useMemo,
   useRef,
@@ -143,6 +144,16 @@ export default function PredictionForm() {
   const [slow, setSlow] = useState(false);
 
   const abortRef = useRef<AbortController | null>(null);
+
+  function preventNumberWheelChange(
+    event: WheelEvent<HTMLFormElement>,
+  ) {
+    const target = event.target as HTMLInputElement;
+
+    if (target.matches('input[type="number"]')) {
+      event.preventDefault();
+    }
+  }
 
 
   useEffect(() => {
@@ -533,6 +544,7 @@ export default function PredictionForm() {
     <form
       className="prediction-form"
       onSubmit={submit}
+      onWheelCapture={preventNumberWheelChange}
       noValidate
     >
 
