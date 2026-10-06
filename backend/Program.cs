@@ -32,6 +32,11 @@ var app = builder.Build();
 
 app.UseCors("Frontend");
 
+
+/* =========================================================
+   BACKEND HEALTH
+========================================================= */
+
 app.MapGet("/health", () =>
     Results.Ok(new { status = "ok" })
 );
@@ -39,6 +44,97 @@ app.MapGet("/health", () =>
 app.MapGet("/ready", () =>
     Results.Ok(new { status = "ready" })
 );
+
+
+/* =========================================================
+   ML WARMUP
+
+   Called silently when the frontend prediction page loads.
+
+   This endpoint is intentionally best-effort:
+   - it does not expose an error to the user
+   - it does not block form use
+   - it simply gives the Render ML service time to wake up
+========================================================= */
+
+app.MapGet(
+    "/api/ml/warmup",
+    async (
+        IHttpClientFactory factory,
+        ILogger<Program> logger,
+        CancellationToken cancellationToken
+    ) =>
+    {
+        try
+        {
+            var client = factory.CreateClient("ml");
+
+            using var response =
+                await client.GetAsync(
+                    "/ready",
+                    cancellationToken
+                );
+
+            if (response.IsSuccessStatusCode)
+            {
+                return Results.Ok(
+                    new { status = "ready" }
+                );
+            }
+
+            logger.LogInformation(
+                "ML warmup returned status {StatusCode}.",
+                (int)response.StatusCode
+            );
+
+            /*
+             * 202 means:
+             * warmup was attempted, but ML is not ready yet.
+             *
+             * This is not treated as a user-facing failure.
+             */
+            return Results.Json(
+                new { status = "warming" },
+                statusCode:
+                    StatusCodes.Status202Accepted
+            );
+        }
+        catch (HttpRequestException ex)
+        {
+            logger.LogInformation(
+                ex,
+                "ML warmup connection did not complete."
+            );
+
+            return Results.Json(
+                new { status = "warming" },
+                statusCode:
+                    StatusCodes.Status202Accepted
+            );
+        }
+        catch (TaskCanceledException)
+            when (
+                !cancellationToken
+                    .IsCancellationRequested
+            )
+        {
+            logger.LogInformation(
+                "ML warmup timed out."
+            );
+
+            return Results.Json(
+                new { status = "warming" },
+                statusCode:
+                    StatusCodes.Status202Accepted
+            );
+        }
+    }
+);
+
+
+/* =========================================================
+   PREDICTION
+========================================================= */
 
 app.MapPost(
     "/api/predictions",
@@ -51,35 +147,43 @@ app.MapPost(
     ) =>
     {
         var requestId =
-            context.Request.Headers["x-request-id"].FirstOrDefault()
+            context.Request.Headers["x-request-id"]
+                .FirstOrDefault()
             ?? Guid.NewGuid().ToString("N");
 
         if (!payload.IsValid())
         {
             return Results.BadRequest(new
             {
-                title = "Invalid prediction input",
-                detail = "Please provide valid values for every clinical field.",
+                title =
+                    "Invalid prediction input",
+
+                detail =
+                    "Please provide valid values for every clinical field.",
+
                 requestId
             });
         }
 
         try
         {
-            var json = JsonSerializer.Serialize(
-                payload,
-                new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = null
-                }
-            );
+            var json =
+                JsonSerializer.Serialize(
+                    payload,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNamingPolicy = null
+                    }
+                );
 
-            var client = factory.CreateClient("ml");
+            var client =
+                factory.CreateClient("ml");
 
             using var operationCts =
-                CancellationTokenSource.CreateLinkedTokenSource(
-                    cancellationToken
-                );
+                CancellationTokenSource
+                    .CreateLinkedTokenSource(
+                        cancellationToken
+                    );
 
             operationCts.CancelAfter(
                 TimeSpan.FromSeconds(120)
@@ -88,9 +192,10 @@ app.MapPost(
             var operationToken =
                 operationCts.Token;
 
-            // =====================================================
-            // 1. WAIT FOR ML SERVICE TO BECOME READY
-            // =====================================================
+
+            /* =================================================
+               WAIT FOR ML SERVICE TO BECOME READY
+            ================================================= */
 
             var readinessDelays = new[]
             {
@@ -106,7 +211,8 @@ app.MapPost(
 
             for (
                 var attempt = 0;
-                attempt < readinessDelays.Length;
+                attempt <
+                readinessDelays.Length;
                 attempt++
             )
             {
@@ -139,10 +245,14 @@ app.MapPost(
                     }
 
                     var transient =
-                        readinessResponse.StatusCode is
-                            HttpStatusCode.BadGateway or
-                            HttpStatusCode.ServiceUnavailable or
-                            HttpStatusCode.GatewayTimeout;
+                        readinessResponse
+                            .StatusCode is
+                            HttpStatusCode
+                                .BadGateway or
+                            HttpStatusCode
+                                .ServiceUnavailable or
+                            HttpStatusCode
+                                .GatewayTimeout;
 
                     if (
                         !transient ||
@@ -153,9 +263,13 @@ app.MapPost(
                         return Results.Problem(
                             "The prediction service is not ready.",
                             statusCode:
-                                (int)readinessResponse.StatusCode,
+                                (int)readinessResponse
+                                    .StatusCode,
                             extensions:
-                                new Dictionary<string, object?>
+                                new Dictionary<
+                                    string,
+                                    object?
+                                >
                                 {
                                     ["requestId"] =
                                         requestId
@@ -165,7 +279,8 @@ app.MapPost(
 
                     logger.LogWarning(
                         "ML readiness returned {StatusCode}; retrying attempt {Attempt} for request {RequestId}.",
-                        (int)readinessResponse.StatusCode,
+                        (int)readinessResponse
+                            .StatusCode,
                         attempt + 2,
                         requestId
                     );
@@ -208,7 +323,10 @@ app.MapPost(
                         StatusCodes
                             .Status503ServiceUnavailable,
                     extensions:
-                        new Dictionary<string, object?>
+                        new Dictionary<
+                            string,
+                            object?
+                        >
                         {
                             ["requestId"] =
                                 requestId
@@ -216,9 +334,10 @@ app.MapPost(
                 );
             }
 
-            // =====================================================
-            // 2. SEND PREDICTION REQUEST WITH TRANSIENT RETRIES
-            // =====================================================
+
+            /* =================================================
+               SEND PREDICTION WITH TRANSIENT RETRIES
+            ================================================= */
 
             var predictionRetryDelays =
                 new[]
@@ -228,7 +347,8 @@ app.MapPost(
                     TimeSpan.FromSeconds(5),
                 };
 
-            HttpResponseMessage? response = null;
+            HttpResponseMessage? response =
+                null;
 
             for (
                 var attempt = 0;
@@ -238,7 +358,9 @@ app.MapPost(
             )
             {
                 var delay =
-                    predictionRetryDelays[attempt];
+                    predictionRetryDelays[
+                        attempt
+                    ];
 
                 if (delay > TimeSpan.Zero)
                 {
@@ -277,14 +399,18 @@ app.MapPost(
 
                     var transient =
                         response.StatusCode is
-                            HttpStatusCode.BadGateway or
-                            HttpStatusCode.ServiceUnavailable or
-                            HttpStatusCode.GatewayTimeout;
+                            HttpStatusCode
+                                .BadGateway or
+                            HttpStatusCode
+                                .ServiceUnavailable or
+                            HttpStatusCode
+                                .GatewayTimeout;
 
                     if (
                         !transient ||
                         attempt ==
-                        predictionRetryDelays.Length - 1
+                        predictionRetryDelays
+                            .Length - 1
                     )
                     {
                         break;
@@ -303,7 +429,8 @@ app.MapPost(
                 catch (HttpRequestException)
                     when (
                         attempt <
-                        predictionRetryDelays.Length - 1
+                        predictionRetryDelays
+                            .Length - 1
                     )
                 {
                     logger.LogWarning(
@@ -319,7 +446,8 @@ app.MapPost(
                         !operationToken
                             .IsCancellationRequested &&
                         attempt <
-                        predictionRetryDelays.Length - 1
+                        predictionRetryDelays
+                            .Length - 1
                     )
                 {
                     logger.LogWarning(
@@ -338,7 +466,10 @@ app.MapPost(
                         StatusCodes
                             .Status503ServiceUnavailable,
                     extensions:
-                        new Dictionary<string, object?>
+                        new Dictionary<
+                            string,
+                            object?
+                        >
                         {
                             ["requestId"] =
                                 requestId
@@ -360,7 +491,8 @@ app.MapPost(
             return Results.Content(
                 body,
                 "application/json",
-                statusCode: statusCode
+                statusCode:
+                    statusCode
             );
         }
         catch (TaskCanceledException)
@@ -375,7 +507,10 @@ app.MapPost(
                     StatusCodes
                         .Status504GatewayTimeout,
                 extensions:
-                    new Dictionary<string, object?>
+                    new Dictionary<
+                        string,
+                        object?
+                    >
                     {
                         ["requestId"] =
                             requestId
@@ -396,7 +531,10 @@ app.MapPost(
                     StatusCodes
                         .Status503ServiceUnavailable,
                 extensions:
-                    new Dictionary<string, object?>
+                    new Dictionary<
+                        string,
+                        object?
+                    >
                     {
                         ["requestId"] =
                             requestId
@@ -407,6 +545,11 @@ app.MapPost(
 );
 
 app.Run();
+
+
+/* =========================================================
+   REQUEST MODEL
+========================================================= */
 
 public sealed record PredictionRequest(
     double Age,
