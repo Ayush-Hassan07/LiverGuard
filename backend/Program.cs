@@ -8,9 +8,21 @@ builder.Services.AddHttpClient("ml", client =>
     client.BaseAddress = new Uri(builder.Configuration["MlServiceUrl"] ?? "http://localhost:8000");
     client.Timeout = TimeSpan.FromSeconds(30);
 });
-builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod()));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:3000",
+                "https://liverguard.vercel.app"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 var app = builder.Build();
-app.UseCors();
+app.UseCors("Frontend");
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 app.MapGet("/ready", () => Results.Ok(new { status = "ready" }));
 app.MapPost("/api/predictions", async (PredictionRequest payload, IHttpClientFactory factory, HttpContext context, CancellationToken cancellationToken) =>
